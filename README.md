@@ -1,9 +1,9 @@
-# MemoRAG: Self-Evolving Support Agent 🧠
+# Email-Assistant: Self-Evolving Support Agent 🧠
 
 > **A Resume-Driven AI Project merging Agentic RAG with Advanced Memory Systems.**
 
 ## 📖 Overview
-**MemoRAG** is an autonomous support agent designed to simulate a senior support engineer. Unlike traditional RAG systems that are stateless and often repetitive, MemoRAG **learns from experience**.
+**Email-Assistant** is an autonomous support agent designed to simulate a senior support engineer. Unlike traditional RAG systems that are stateless and often repetitive, Email-Assistant **learns from experience**.
 
 It combines two powerful AI paradigms:
 1.  **Agentic RAG (Retrieval-Augmented Generation)**: Capable of researching documentation, grading its own retrieval, and self-correcting if it finds irrelevant information.
@@ -90,8 +90,8 @@ classDiagram
 ### Installation
 ```bash
 # Clone the repository
-git clone https://github.com/MedAzizAydi080/MemoRAG.git
-cd MemoRAG
+git clone https://github.com/MedAzizAydi080/Email-Assistant.git
+cd Email-Assistant
 
 # Install dependencies
 pip install -r requirements.txt
@@ -105,7 +105,4 @@ python main.py
 
 ## 🧠 Memory Data Structure
 -   `data/memory/episodes.db`: Stores "few-shot" examples of past successful tickets.
--   `data/prompts/`: Text files containing the system prompts that the agent *rewrites* as it learns.
-
-## 📄 License
-MIT
+-   `data/prompts/`: Text files containing system prompts.

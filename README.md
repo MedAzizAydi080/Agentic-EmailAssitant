@@ -1,6 +1,6 @@
 # Email-Assistant: Self-Evolving Support Agent 🧠
 
-> **A Resume-Driven AI Project merging Agentic RAG with Advanced Memory Systems.**
+> **An Advanced AI Project merging Agentic RAG with Self-Improving Memory Systems.**
 
 ## 📖 Overview
 **Email-Assistant** is an autonomous support agent designed to simulate a senior support engineer. Unlike traditional RAG systems that are stateless and often repetitive, Email-Assistant **learns from experience**.
@@ -22,55 +22,62 @@ The system is orchestrated using **LangGraph**, treating the flow as a state mac
 
 ```mermaid
 graph TD
-    Start([User Query]) --> Triage{Triage Node}
+    User([User Query]) --> Triage{Triage Decision}
     
-    %% Memory Path
-    Triage -- "Similar Case Found" --> Episodic[Episodic Memory Reply]
-    Episodic --> Response
+    subgraph "Memory-Based Fast Path"
+        Triage -- "Known Issue" --> Context[Load Context]
+        Context --> Semantic[Apply User Profile]
+        Semantic --> Response
+    end
     
-    %% RAG Path
-    Triage -- "New/Complex Issue" --> RAG[Agentic RAG Subgraph]
-    
-    subgraph "Agentic RAG (The Researcher)"
-        Retrieve[Retrieve Docs] --> Grade{Grade Relevance}
-        Grade -- "Relevant" --> Generate[Generate Answer]
+    subgraph "Agentic RAG Path (Deep Dive)"
+        Triage -- "Unknown/Complex" --> Retrieve[Retrieve Docs]
+        Retrieve --> Grade{Grade Relevance}
+        Grade -- "Relevant" --> Response[Synthesize Answer]
         Grade -- "Irrelevant" --> Rewrite[Rewrite Query]
         Rewrite --> Retrieve
     end
     
-    RAG --> Response[Synthesis Node]
+    Response --> Output([Final Answer])
     
-    %% Learning Path
-    Response --> Feedback{User Feedback?}
-    Feedback -- "Negative" --> Optimize[Optimizer Node]
-    Optimize --> UpdatePrompts[(Update Procedural Memory)]
+    %% Learning Loop
+    Output -.-> Feedback{User Feedback}
+    Feedback -- "Improvement Needed" --> Optimize[Optimizer Node]
+    Optimize --> UpdatePrompts[(Update System Prompts)]
 ```
 
-### Component Stack
+### Component Architecture
 
 ```mermaid
 classDiagram
-    class Application {
-        +LangGraph Orchestration
-        +Ollama (LLM)
-        +ChromaDB (Vector Store)
-        +SQLite (Memory Store)
+    direction TB
+    class AgentState {
+        +str input
+        +str decision
+        +List documents
+        +str feedback
     }
 
-    class MemorySystems {
-        +Episodic (Past Episodes)
-        +Semantic (User Profiles)
-        +Procedural (System Prompts)
+    class MemorySystem {
+        +EpisodicMemory (SQLite)
+        +ProceduralMemory (Prompts)
+        +SemanticMemory (JSON)
     }
 
-    class RAGSystems {
-        +Ingestion
-        +Retrieval
-        +Self-Correction
+    class RAGEngine {
+        +LocalVectorStore (ChromaDB)
+        +DocumentGrader (Ollama)
     }
 
-    Application --> MemorySystems
-    Application --> RAGSystems
+    class Orchestrator {
+        +LangGraph Workflow
+        +Triage Node
+        +Research Node
+    }
+
+    Orchestrator --> AgentState : Manages
+    Orchestrator --> MemorySystem : Queries/Updates
+    Orchestrator --> RAGEngine : Delegates Research
 ```
 
 ## 🛠️ Tech Stack
